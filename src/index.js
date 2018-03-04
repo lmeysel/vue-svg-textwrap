@@ -30,6 +30,7 @@ function newLine(el, span, config) {
  */
 function set(el, text, config) {
 	el[config.plain ? 'textContent' : 'innerHTML'] = text || '';
+	if (!config.width) return;
 	const plain = [];
 	const physLn = el.getBBox().height; // physical line height
 	// convert text nodes to tspans, clear spans
