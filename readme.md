@@ -37,17 +37,17 @@ By default the given value will be interpreted as HTML/SVG, i.e. it will be appl
 ...thank you, very good question: What is the line-height? It defaults to `1.125em`. Not happy with that? Then you might be interested in setting it yourself, unfortunately this cannot be done via a modifier. Go ahead:
 
 ## Per-directive configuration
-There is not only the directive itself, but also some kind of generator, which allows override standard-configuration. You can access it via
+There is not only the directive itself, but also some kind of generator, which allows override the standard-configuration. You can access it via
 ```javascript
 import { ConfiguredWrapper } from 'vue-svg-textwrap'
 ```
 which is a function, accepting a configuration object as parameter and returning a configured directive:
 ```javascript
 directives: {
-  wrapper: ConfiguredWrapper({ lineHeight: '2em' });
+  wrapper: ConfiguredWrapper({ lineHeight: '2em' })
 }
 ```
-This is how you may override the default line height, but you can also do so with the other properties. Of course, you can create multiple differently configured wrapper directives this way.
+This is how you may override the default line-height, but you can also do so with the other properties. Of course, you can create multiple differently configured wrapper directives this way.
 <table>
 	<thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
 	<tbody>
