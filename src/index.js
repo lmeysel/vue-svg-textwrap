@@ -4,13 +4,13 @@ function getConfig(mod, cfg) {
 		'plain': !cfg.plain ? false : true,
 		'width': null || cfg.width,
 		'align': cfg.align || 'baseline',
-		'lineHeight': '1.125em'
+		'lineHeight': cfg.lineHeight || '1.125em'
 	};
 	for (let k in mod) {
 		if (k === 'plain') ret.plain = true;
-		if (k === 'baseline' || k === 'top' || k === 'bottom' || k === 'middle' || k === 'none')
+		else if (k === 'baseline' || k === 'top' || k === 'bottom' || k === 'middle' || k === 'none')
 			ret.align = k;
-		if (/\d+/.test(k))
+		else if (/\d+/.test(k))
 			ret.width = parseInt(k);
 	}
 	return ret;
