@@ -16,13 +16,13 @@ Vue.directive('textwrap', wrapper);
 ... or locally within a component:
 ```javascript
 directives: {
-	wrapper
+  wrapper
 }
 ```
 ... and then in your vue template:
 ```html
 <svg>
-	<text v-wrapper="myTextProperty" />
+  <text v-wrapper="myTextProperty" />
 </svg>
 ```
 
@@ -44,7 +44,7 @@ import { ConfiguredWrapper } from 'vue-svg-textwrap'
 which is a function, accepting a configuration object as parameter and returning a configured directive:
 ```javascript
 directives: {
-	wrapper: ConfiguredWrapper({ lineHeight: '2em' });
+  wrapper: ConfiguredWrapper({ lineHeight: '2em' });
 }
 ```
 This is how you may override the default line height, but you can also do so with the other properties. Of course, you can create multiple differently configured wrapper directives this way.
@@ -81,9 +81,9 @@ This is how you may override the default line height, but you can also do so wit
 ## About the wrapper
 * When saying "line-height", I am just talking about the value applied on `tspan`-elements for the `dy`-attribute.
 * The wrapper will set or override the attributes/properties
-* * `tspan.dy`
-* * `tspan.x`
-* * `tspan.style.display`
+	* `tspan.dy`
+	* `tspan.x`
+	* `tspan.style.display`
 
 ## Be careful with `text`'s `transform`-property.
 ... because this will be overwritten, to fit the alignment. If want to set the translation by yourself, use `align = 'none'`. The transform property will not be touched then.
