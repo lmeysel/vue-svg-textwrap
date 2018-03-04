@@ -1,0 +1,4 @@
+node_modules
+test/build.*
+test/mix-manifest.json
+.vscode
