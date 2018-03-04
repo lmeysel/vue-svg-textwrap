@@ -8,6 +8,14 @@
 		"watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
 		"build": "babel --minified -o dist/index.min.js -s true --no-comments src/index.js"
 	},
+	"repository": {
+	  "type": "git",
+	  "url": "git+https://github.com/lmeysel/vue-svg-textwrap.git"
+	},
+	"bugs": {
+	  "url": "https://github.com/lmeysel/vue-svg-textwrap/issues"
+	},
+	"homepage": "https://github.com/lmeysel/vue-svg-textwrap#readme",
 	"babel": {
 		"presets": [
 			"env"
