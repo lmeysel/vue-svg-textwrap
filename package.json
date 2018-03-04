@@ -1,6 +1,6 @@
 {
 	"name": "vue-svg-textwrap",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "A vue-directive for svg text elements enabling autowrapping text",
 	"main": "src/index.js",
 	"scripts": {
@@ -9,11 +9,11 @@
 		"build": "babel --minified -o dist/index.min.js -s true --no-comments src/index.js"
 	},
 	"repository": {
-	  "type": "git",
-	  "url": "git+https://github.com/lmeysel/vue-svg-textwrap.git"
+		"type": "git",
+		"url": "git+https://github.com/lmeysel/vue-svg-textwrap.git"
 	},
 	"bugs": {
-	  "url": "https://github.com/lmeysel/vue-svg-textwrap/issues"
+		"url": "https://github.com/lmeysel/vue-svg-textwrap/issues"
 	},
 	"homepage": "https://github.com/lmeysel/vue-svg-textwrap#readme",
 	"babel": {
