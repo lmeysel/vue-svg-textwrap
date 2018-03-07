@@ -34,7 +34,7 @@ function set(el, text, config) {
 	const plain = [];
 	const physLn = el.getBBox().height; // physical line height
 	// convert text nodes to tspans, clear spans
-	el.childNodes.forEach(n => {
+	el.childNodes.forEach(function (n) {
 		if (n instanceof Text) {
 			const tmp = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
 			tmp.textContent = n.textContent;
@@ -69,7 +69,7 @@ function set(el, text, config) {
 			txt = span.textContent;
 		}
 	}
-	el.childNodes.forEach(n => n.style.display = null)
+	el.childNodes.forEach(function (n) { n.style.display = null })
 	if (config.align === 'middle')
 		el.setAttribute('transform', `translate(0, -${(el.getBBox().height - physLn) / 2})`)
 	else if (config.align === 'baseline')
