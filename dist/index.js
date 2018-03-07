@@ -84,7 +84,7 @@ function set(el, text, config) {
 function directive(config) {
 	if (!config) config = {};
 	return {
-		bind: function bind(el, binding) {
+		inserted: function inserted(el, binding) {
 			if (!(el instanceof SVGTextElement)) throw new Error('Text-wrap directive must be bound to an SVG text element.');
 			el.__WRAP_CONFIG = getConfig(binding.modifiers, config);
 			set(el, binding.value, el.__WRAP_CONFIG);
