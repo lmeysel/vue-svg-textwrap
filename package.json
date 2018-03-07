@@ -2,7 +2,7 @@
 	"name": "vue-svg-textwrap",
 	"version": "0.0.4",
 	"description": "A vue-directive for svg text elements enabling autowrapping text",
-	"main": "src/index.js",
+	"main": "dist/index.js",
 	"files": [
 		"src",
 		"dist/*.js"
@@ -10,7 +10,9 @@
 	"scripts": {
 		"dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
 		"watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-		"build": "babel --minified -o dist/index.min.js -s true --no-comments src/index.js"
+		"build": "npm run prod && npm run prod-min",
+		"prod": "babel -o dist/index.js -s true --no-comments src/index.js",
+		"prod-min": "babel --minified -o dist/index.min.js -s true --no-comments src/index.js"
 	},
 	"repository": {
 		"type": "git",
