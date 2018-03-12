@@ -8,7 +8,8 @@ new Vue($.extend(require('./app.vue'), {
 			lineHeight: '1.5em'
 		}),
 		wrapPad: ConfiguredWrapper({
-			width: 200
+			width: 200,
+			padding: 20
 		})
 	},
 	el: '#app',
