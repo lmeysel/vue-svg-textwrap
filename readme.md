@@ -75,6 +75,24 @@ This is how you may override the default line-height, but you can also do so wit
 			<td>'1.125em'</td>
 			<td>The line height.</td>
 		</tr>
+		<tr>
+			<td>padding</td>
+			<td>string|int</td>
+			<td>0</td>
+			<td>Padding on left and right side. This has lesser priority when set with paddingLeft and/or paddingRight. <i>(Since 0.8)</i></td>
+		</tr>
+		<tr>
+			<td>paddingLeft</td>
+			<td>string|int</td>
+			<td>0</td>
+			<td>Padding on the left side. Overwrites eventually given option 'padding'. <i>(Since 0.8)</i></td>
+		</tr>
+		<tr>
+			<td>paddingRight</td>
+			<td>string|int</td>
+			<td>0</td>
+			<td>Padding on the right side. Overwrites eventually given option 'padding'. <i>(Since 0.8)</i></td>
+		</tr>
 	</tbody>
 </table>
 

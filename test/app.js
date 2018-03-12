@@ -5,7 +5,10 @@ import { ConfiguredWrapper } from '../src/index';
 new Vue($.extend(require('./app.vue'), {
 	directives: {
 		wrap: ConfiguredWrapper({
-			lineHeight: '2em'
+			lineHeight: '1.5em'
+		}),
+		wrapPad: ConfiguredWrapper({
+			width: 200
 		})
 	},
 	el: '#app',

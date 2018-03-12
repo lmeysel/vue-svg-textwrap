@@ -12,6 +12,12 @@
 			<path stroke="black" stroke-width="2" d="M-3,-3L3,3M-3,3L3,-3" />
 			<text v-wrap.bottom.200="fmtText" />
 		</g>
+		<g transform="translate(510, 290)">
+			<path stroke="black" stroke-width="2" d="M-3,-3L3,3M-3,3L3,-3" />
+			<text v-wrap-pad.top="'<tspan style=\'text-decoration:underline;font-weight:bold\'>With padding</tspan>: '+fmtText" />
+			<rect height="200" width="20" fill="#c8c8c8" opacity=".4"></rect>
+			<rect height="200" width="20" x="180" fill="#c8c8c8" opacity=".4"></rect>
+		</g>
 		<g transform="translate(760, 250)">
 			<path stroke="black" stroke-width="2" d="M-3,-3L3,3M-3,3L3,-3" />
 			<text v-wrap.baseline.200="fmtText" />

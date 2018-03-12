@@ -4,8 +4,11 @@ function getConfig(mod, cfg) {
 		'plain': !cfg.plain ? false : true,
 		'width': null || cfg.width,
 		'align': cfg.align || 'baseline',
-		'lineHeight': cfg.lineHeight || '1.125em'
+		'lineHeight': cfg.lineHeight || '1.125em',
+		'paddingLeft': cfg.paddingLeft === undefined ? (cfg.padding === undefined ? 0 : cfg.padding) : cfg.paddingLeft,
+		'paddingRight': cfg.paddingRight === undefined ? (cfg.padding === undefined ? 0 : cfg.padding) : cfg.paddingRight
 	};
+	ret.padding = ret.paddingLeft + ret.paddingRight;
 	for (let k in mod) {
 		if (k === 'plain') ret.plain = true;
 		else if (k === 'baseline' || k === 'top' || k === 'bottom' || k === 'middle' || k === 'none')
@@ -20,7 +23,7 @@ function newLine(el, span, config) {
 	el.insertBefore(tmp, span.nextSibling);
 	span.style.display = null;
 	tmp.setAttribute('dy', config.lineHeight);
-	tmp.setAttribute('x', '0');
+	tmp.setAttribute('x', config.paddingLeft);
 	return tmp;
 }
 /**
@@ -44,11 +47,13 @@ function set(el, text, config) {
 		plain.push(n.textContent.split(' '));
 		n.textContent = '';
 	});
-	if (el.childElementCount)
+	if (el.childElementCount) {
 		el.childNodes[0].setAttribute('y', 0);
+		el.childNodes[0].setAttribute('x', config.paddingLeft);
+	}
 
 	// float texts
-	let offset = 0, w = config.width, childCnt = el.childElementCount;
+	let offset = 0, w = config.width - config.padding, childCnt = el.childElementCount;
 	for (let c = 0; c < childCnt; c++) {
 		const words = plain[c];
 		let wc = words.length, span = el.childNodes[c + offset], txt = '', forceBreak = false;
@@ -79,6 +84,7 @@ function set(el, text, config) {
 	else if (config.align === 'top')
 		el.setAttribute('transform', `translate(0, ${physLn})`)
 }
+
 /**
  * Creates a new wrapper directive with the given configuration.
  * @param {ITextWrapperConfiguration} config A configuration object.

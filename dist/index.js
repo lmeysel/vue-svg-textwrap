@@ -16,8 +16,11 @@ function getConfig(mod, cfg) {
 		'plain': !cfg.plain ? false : true,
 		'width': null || cfg.width,
 		'align': cfg.align || 'baseline',
-		'lineHeight': cfg.lineHeight || '1.125em'
+		'lineHeight': cfg.lineHeight || '1.125em',
+		'paddingLeft': cfg.paddingLeft === undefined ? cfg.padding === undefined ? 0 : cfg.padding : cfg.paddingLeft,
+		'paddingRight': cfg.paddingRight === undefined ? cfg.padding === undefined ? 0 : cfg.padding : cfg.paddingRight
 	};
+	ret.padding = ret.paddingLeft + ret.paddingRight;
 	for (var k in mod) {
 		if (k === 'plain') ret.plain = true;else if (k === 'baseline' || k === 'top' || k === 'bottom' || k === 'middle' || k === 'none') ret.align = k;else if (/\d+/.test(k)) ret.width = parseInt(k);
 	}
@@ -28,7 +31,7 @@ function newLine(el, span, config) {
 	el.insertBefore(tmp, span.nextSibling);
 	span.style.display = null;
 	tmp.setAttribute('dy', config.lineHeight);
-	tmp.setAttribute('x', '0');
+	tmp.setAttribute('x', config.paddingLeft);
 	return tmp;
 }
 
@@ -47,10 +50,13 @@ function set(el, text, config) {
 		plain.push(n.textContent.split(' '));
 		n.textContent = '';
 	});
-	if (el.childElementCount) el.childNodes[0].setAttribute('y', 0);
+	if (el.childElementCount) {
+		el.childNodes[0].setAttribute('y', 0);
+		el.childNodes[0].setAttribute('x', config.paddingLeft);
+	}
 
 	var offset = 0,
-	    w = config.width,
+	    w = config.width - config.padding,
 	    childCnt = el.childElementCount;
 	for (var c = 0; c < childCnt; c++) {
 		var words = plain[c];
