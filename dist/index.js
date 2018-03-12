@@ -26,10 +26,12 @@ function getConfig(mod, cfg) {
 	}
 	return ret;
 }
+
 function newLine(el, span, config) {
 	var tmp = span.cloneNode();
 	el.insertBefore(tmp, span.nextSibling);
 	span.style.display = null;
+	tmp.removeAttribute('y');
 	tmp.setAttribute('dy', config.lineHeight);
 	tmp.setAttribute('x', config.paddingLeft);
 	return tmp;

@@ -99,9 +99,10 @@ This is how you may override the default line-height, but you can also do so wit
 ## About the wrapper
 * When saying "line-height", I am just talking about the value applied on `tspan`-elements for the `dy`-attribute.
 * The wrapper will set or override the attributes/properties
-	* `tspan.dy`
-	* `tspan.x`
-	* `tspan.style.display`
+	* `tspan.dy = config.lineHeight`
+	* `tspan.y` (will be removed)
+	* `tspan.x` (will be set to 0 for the first tspan on each line)
+	* `tspan.style.display` (will be set to 'none' temporarily to ignore too long lines in further measurements)
 
 ## Be careful with `text`'s `transform`-property.
 ... because this will be overwritten, to fit the alignment. If want to set the translation by yourself, use `align = 'none'`. The transform property will not be touched then.

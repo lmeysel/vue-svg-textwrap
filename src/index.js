@@ -18,10 +18,16 @@ function getConfig(mod, cfg) {
 	}
 	return ret;
 }
+/**
+ * @param {SVGTextElement} el 
+ * @param {SVGTSpanElement} span 
+ * @param {*} config 
+ */
 function newLine(el, span, config) {
 	const tmp = span.cloneNode();
 	el.insertBefore(tmp, span.nextSibling);
 	span.style.display = null;
+	tmp.removeAttribute('y');
 	tmp.setAttribute('dy', config.lineHeight);
 	tmp.setAttribute('x', config.paddingLeft);
 	return tmp;
