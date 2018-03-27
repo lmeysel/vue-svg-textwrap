@@ -98,7 +98,7 @@ function directive(config) {
 			set(el, binding.value, el.__WRAP_CONFIG);
 		},
 		update: function update(el, binding) {
-			set(el, binding.value, el.__WRAP_CONFIG);
+			if (binding.value != binding.oldValue) set(el, binding.value, el.__WRAP_CONFIG);
 		},
 		unbind: function unbind(el) {
 			delete el.__WRAP_CONFIG;
