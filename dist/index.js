@@ -98,7 +98,10 @@ function directive(config) {
 			set(el, binding.value, el.__WRAP_CONFIG);
 		},
 		update: function update(el, binding) {
-			if (binding.value != binding.oldValue) set(el, binding.value, el.__WRAP_CONFIG);
+			if (binding.value != binding.oldValue) if (binding.value && typeof binding.value !== 'string') {
+				var text = binding.value.text;
+				set(el, text, Object.assign({}, el.__WRAP_CONFIG, binding.value));
+			} else set(el, binding.value, el.__WRAP_CONFIG);
 		},
 		unbind: function unbind(el) {
 			delete el.__WRAP_CONFIG;

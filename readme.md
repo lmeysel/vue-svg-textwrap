@@ -76,7 +76,7 @@ This is how you may override the default line-height, but you can also do so wit
 			<td>The line height.</td>
 		</tr>
 		<tr>
-			<td>padding</td>
+			<td>padding<td>
 			<td>int</td>
 			<td>0</td>
 			<td>Padding on left and right side. This has lesser priority when set with paddingLeft and/or paddingRight. <i>(Since 0.8)</i></td>
@@ -95,6 +95,12 @@ This is how you may override the default line-height, but you can also do so wit
 		</tr>
 	</tbody>
 </table>
+
+## Configuration bindings
+Since 0.0.12 you are able to override the settings with dynamic property values (i.e. bind to instance properties). Using the directive as following you can e.g. bind the width for the text-wrapper: 
+```html
+<text v-wrapper="{ text: myTextProperty, width: myWidthProperty }" />
+```
 
 ## About the wrapper
 * When saying "line-height", I am just talking about the value applied on `tspan`-elements for the `dy`-attribute.
