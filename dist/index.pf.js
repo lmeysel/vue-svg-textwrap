@@ -105,4 +105,4 @@ var Wrapper = directive();
 exports.default = Wrapper;
 var ConfiguredWrapper = exports.ConfiguredWrapper = directive;
 
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index.pf.js.map
