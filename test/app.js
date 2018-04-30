@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import $ from 'jquery';
-import { ConfiguredWrapper } from '../src/index';
+import { ConfiguredWrapper } from '../src/polyfills';
 
 new Vue($.extend(require('./app.vue'), {
 	directives: {

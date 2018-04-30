@@ -1,4 +1,3 @@
-import Vue from 'vue';
 function getConfig(mod, cfg) {
 	const ret = {
 		'plain': !cfg.plain ? false : true,
@@ -43,7 +42,8 @@ function set(el, text, config) {
 	const plain = [];
 	const physLn = el.getBBox().height; // physical line height
 	// convert text nodes to tspans, clear spans
-	el.childNodes.forEach(function (n) {
+	for (let i = 0; i < el.childNodes.length; i++) {
+		let n = el.childNodes[i];
 		if (n instanceof Text) {
 			const tmp = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
 			tmp.textContent = n.textContent;
@@ -52,7 +52,7 @@ function set(el, text, config) {
 		}
 		plain.push(n.textContent.split(' '));
 		n.textContent = '';
-	});
+	}
 	if (el.childElementCount) {
 		el.childNodes[0].setAttribute('y', 0);
 		el.childNodes[0].setAttribute('x', config.paddingLeft);
@@ -80,7 +80,10 @@ function set(el, text, config) {
 			txt = span.textContent;
 		}
 	}
-	el.childNodes.forEach(function (n) { n.style.display = null })
+
+	for (let i = 0; i < el.childNodes.length; i++)
+		el.childNodes[i].style.display = null;
+
 	if (config.align === 'middle')
 		el.setAttribute('transform', `translate(0, -${(el.getBBox().height - physLn) / 2})`)
 	else if (config.align === 'baseline')
@@ -105,7 +108,7 @@ function directive(config) {
 			set(el, binding.value, el.__WRAP_CONFIG);
 		},
 		update(el, binding) {
-			if (binding.value != binding.oldValue)
+			if (binding.value !== binding.oldValue)
 				if (binding.value && (typeof binding.value) !== 'string') {
 					const text = binding.value.text;
 					set(el, text, Object.assign({}, el.__WRAP_CONFIG, binding.value));
