@@ -117,7 +117,7 @@ Since 0.0.12 you are able to override the settings with dynamic property values 
 For IE there are two functions which are needed to be polyfilled:
 * `SVGElement.innerHTML` could be done with innersvg-polyfill (npm-package)
 * `Object.assign(...)` could be done with core-js/(library/)fn/object/assign
-You may want to control your polyfills yourself, therefore the default exported comes without polyfills, but there are also polyfilled versions available: `dist/index.pf.js` and `dist/index.pf.min.js`
+You may want to control your polyfills yourself, therefore the default exported comes without polyfills, but there are also polyfilled versions available: `dist/index.pf.js` and `dist/index.pf.min.js`.
 
 ## Very long words
 Currently the wrapper has a problem with too long words, i.e words which are too long to wrap within the desired width (especially when formatting a text about a German *Donaudampfschifffahrtsgesellschaftskapitänskajüttenbodenreiniger*). Maybe I am just thinking too complicated for now or the problem is really difficult... Whatever, too long words cause unreliable behavior currently :(
