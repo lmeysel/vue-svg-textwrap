@@ -26,7 +26,7 @@
 	"homepage": "https://github.com/lmeysel/vue-svg-textwrap#readme",
 	"babel": {
 		"presets": [
-			"env"
+			"@babel/preset-env"
 		]
 	},
 	"keywords": [
@@ -39,15 +39,16 @@
 	"typings": "src/index.d.ts",
 	"author": "Ludwig Meysel",
 	"license": "MIT",
-	"dependencies": {
-		"core-js": "^2.5.5",
-		"innersvg-polyfill": "0.0.2",
-		"vue": "^2.5.13"
-	},
+	"dependencies": {},
 	"devDependencies": {
+		"@babel/core": "^7.2.0",
+		"@babel/preset-env": "^7.2.0",
 		"browser-sync": "^2.23.6",
 		"browser-sync-webpack-plugin": "^2.0.1",
+		"core-js": "^2.5.5",
+		"innersvg-polyfill": "0.0.2",
 		"jquery": "^3.3.1",
-		"laravel-mix": "^2.0.0"
+		"laravel-mix": "^3.0.0",
+		"vue": "^2.5.13"
 	}
 }
