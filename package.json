@@ -1,6 +1,6 @@
 {
 	"name": "vue-svg-textwrap",
-	"version": "0.0.13",
+	"version": "0.0.14",
 	"description": "A vue-directive for svg text elements enabling autowrapping text",
 	"main": "dist/index.js",
 	"files": [
