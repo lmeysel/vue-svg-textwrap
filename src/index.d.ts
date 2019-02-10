@@ -29,4 +29,9 @@ interface ITextWrapperConfiguration {
 	 * Padding on the right side.
 	 */
 	paddingRight: Number,
+	
+	/**
+	 * A callback, called after the text has been updated and reflow is done.
+	 */
+	afterReflow: (sender: SVGTextElement, binding: ITextWrapperConfiguration) => any,
 }

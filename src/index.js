@@ -5,7 +5,8 @@ function getConfig(mod, cfg) {
 		'align': cfg.align || 'baseline',
 		'lineHeight': cfg.lineHeight || '1.125em',
 		'paddingLeft': cfg.paddingLeft === undefined ? (cfg.padding === undefined ? 0 : cfg.padding) : cfg.paddingLeft,
-		'paddingRight': cfg.paddingRight === undefined ? (cfg.padding === undefined ? 0 : cfg.padding) : cfg.paddingRight
+		'paddingRight': cfg.paddingRight === undefined ? (cfg.padding === undefined ? 0 : cfg.padding) : cfg.paddingRight,
+		'afterReflow': cfg.afterReflow instanceof Function ? cfg.afterReflow : false
 	};
 	ret.padding = ret.paddingLeft + ret.paddingRight;
 	for (let k in mod) {
@@ -100,25 +101,31 @@ function set(el, text, config) {
  */
 function directive(config) {
 	if (!config) config = {};
-	return {
+	const r = {
 		inserted(el, binding) {
 			if (!(el instanceof SVGTextElement))
 				throw new Error('Text-wrap directive must be bound to an SVG text element.');
 			el.__WRAP_CONFIG = getConfig(binding.modifiers, config);
-			set(el, binding.value, el.__WRAP_CONFIG);
+			r.update.apply(this, arguments);
 		},
-		update(el, binding) {
-			if (binding.value !== binding.oldValue)
+		update(el, binding, { context }) {
+			if (binding.value !== binding.oldValue) {
+				let cfg = el.__WRAP_CONFIG
 				if (binding.value && (typeof binding.value) !== 'string') {
 					const text = binding.value.text;
-					set(el, text, Object.assign({}, el.__WRAP_CONFIG, binding.value));
+					cfg = Object.assign({}, el.__WRAP_CONFIG, binding.value)
+					set(el, text, cfg);
 				} else
-					set(el, binding.value, el.__WRAP_CONFIG);
+					set(el, binding.value, cfg);
+				if (cfg.afterReflow)
+					cfg.afterReflow.call(context, el, cfg);
+			}
 		},
 		unbind(el) {
 			delete el.__WRAP_CONFIG;
 		}
-	}
+	};
+	return r;
 }
 const Wrapper = directive();
 export default Wrapper;

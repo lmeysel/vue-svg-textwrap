@@ -17,6 +17,11 @@ new Vue($.extend(require('./app.vue'), {
 		text: null,
 		fmtText: null
 	},
+	methods: {
+		afterReflow(sender) {
+			console.log('Reflow:', sender);
+		}
+	},
 	mounted() {
 		window.setTimeout(() => {
 			this.text = 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Adipiscienimlaudantium, quisrepell endusipsum oditremomnis velitiusto! Similique porro sint libero quas, voluptate fugiat aliquid laborum. Non, asperiores.';

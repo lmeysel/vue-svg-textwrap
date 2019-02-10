@@ -76,7 +76,7 @@ This is how you may override the default line-height, but you can also do so wit
 			<td>The line height.</td>
 		</tr>
 		<tr>
-			<td>padding<td>
+			<td>padding</td>
 			<td>int</td>
 			<td>0</td>
 			<td>Padding on left and right side. This has lesser priority when set with paddingLeft and/or paddingRight. <i>(Since 0.8)</i></td>
@@ -92,6 +92,12 @@ This is how you may override the default line-height, but you can also do so wit
 			<td>int</td>
 			<td>0</td>
 			<td>Padding on the right side. Overwrites eventually given option 'padding'. <i>(Since 0.8)</i></td>
+		</tr>
+		<tr>
+			<td>afterReflow</td>
+			<td>(SVGTextElement, configuration) => any</td>
+			<td></td>
+			<td>Callback routine to call after text is updated and wrapping calculation is done. `this` is the owning Vue component within the callback. <i>(Since 0.14)</i></td>
 		</tr>
 	</tbody>
 </table>
