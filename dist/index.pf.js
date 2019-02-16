@@ -4,12 +4,18 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.ConfiguredWrapper = exports.default = void 0;
+var alignments = {
+  'top': true,
+  'baseline': true,
+  'bottom': true,
+  'middle': true
+};
 
 function getConfig(mod, cfg) {
   var ret = {
     'plain': !cfg.plain ? false : true,
     'width': null || cfg.width,
-    'align': cfg.align || 'baseline',
+    'align': cfg.align === 'none' ? false : alignments[cfg.align] ? cfg.align : 'baseline',
     'lineHeight': cfg.lineHeight || '1.125em',
     'paddingLeft': cfg.paddingLeft === undefined ? cfg.padding === undefined ? 0 : cfg.padding : cfg.paddingLeft,
     'paddingRight': cfg.paddingRight === undefined ? cfg.padding === undefined ? 0 : cfg.padding : cfg.paddingRight,
@@ -18,7 +24,11 @@ function getConfig(mod, cfg) {
   ret.padding = ret.paddingLeft + ret.paddingRight;
 
   for (var k in mod) {
-    if (k === 'plain') ret.plain = true;else if (k === 'baseline' || k === 'top' || k === 'bottom' || k === 'middle' || k === 'none') ret.align = k;else if (/\d+/.test(k)) ret.width = parseInt(k);
+    if (k === 'plain') ret.plain = true;else if (alignments[k]) {
+      ret.align = k;
+    } else if (k === 'none') {
+      ret.align = false;
+    } else if (/\d+/.test(k)) ret.width = parseInt(k);
   }
 
   return ret;
@@ -30,7 +40,7 @@ function newLine(el, span, config) {
   span.style.display = null;
   tmp.removeAttribute('y');
   tmp.setAttribute('dy', config.lineHeight);
-  tmp.setAttribute('x', config.paddingLeft);
+  if (!config.align) tmp.setAttribute('x', config.paddingLeft);else tmp.setAttribute('x', 0);
   return tmp;
 }
 
@@ -54,8 +64,7 @@ function set(el, text, config) {
     n.textContent = '';
   }
 
-  if (el.childElementCount) {
-    el.childNodes[0].setAttribute('y', 0);
+  if (!config.align) {
     el.childNodes[0].setAttribute('x', config.paddingLeft);
   }
 
@@ -95,7 +104,7 @@ function set(el, text, config) {
     el.childNodes[_i2].style.display = null;
   }
 
-  if (config.align === 'middle') el.setAttribute('transform', "translate(0, -".concat((el.getBBox().height - physLn) / 2, ")"));else if (config.align === 'baseline') el.setAttribute('transform', "translate(0, -".concat(config.lineHeight - physLn, ")"));else if (config.align === 'bottom') el.setAttribute('transform', "translate(0, -".concat(el.getBBox().height - physLn, ")"));else if (config.align === 'top') el.setAttribute('transform', "translate(0, ".concat(physLn, ")"));
+  if (config.align === 'middle') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(-(el.getBBox().height - physLn) / 2, ")"));else if (config.align === 'baseline') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", 0)"));else if (config.align === 'bottom') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(-(el.getBBox().height - physLn), ")"));else if (config.align === 'top') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(physLn, ")"));
 }
 
 function directive(config) {
@@ -114,7 +123,7 @@ function directive(config) {
 
         if (binding.value && typeof binding.value !== 'string') {
           var text = binding.value.text;
-          cfg = Object.assign({}, el.__WRAP_CONFIG, binding.value);
+          cfg = getConfig({}, Object.assign({}, el.__WRAP_CONFIG, binding.value));
           set(el, text, cfg);
         } else set(el, binding.value, cfg);
 

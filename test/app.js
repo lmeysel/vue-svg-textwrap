@@ -1,8 +1,7 @@
 import Vue from 'vue';
-import $ from 'jquery';
 import { ConfiguredWrapper } from '../src/polyfills';
-
-new Vue($.extend(require('./app.vue'), {
+const appTemplate = require('./app.vue').default;
+new Vue(Object.assign(appTemplate, {
 	directives: {
 		wrap: ConfiguredWrapper({
 			lineHeight: '1.5em'

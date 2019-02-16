@@ -39,16 +39,16 @@
 	"typings": "src/index.d.ts",
 	"author": "Ludwig Meysel",
 	"license": "MIT",
-	"dependencies": {},
 	"devDependencies": {
-		"@babel/core": "^7.2.0",
-		"@babel/preset-env": "^7.2.0",
-		"browser-sync": "^2.23.6",
-		"browser-sync-webpack-plugin": "^2.0.1",
-		"core-js": "^2.5.5",
+		"@babel/core": "^7.3.3",
+		"@babel/preset-env": "^7.3.1",
+		"browser-sync": "^2.26.3",
+		"browser-sync-webpack-plugin": "^2.2.2",
+		"core-js": "^2.6.5",
 		"innersvg-polyfill": "0.0.2",
-		"jquery": "^3.3.1",
-		"laravel-mix": "^3.0.0",
-		"vue": "^2.5.13"
-	}
+		"laravel-mix": "^4.0.14",
+		"vue": "^2.6.6",
+		"vue-template-compiler": "^2.6.6"
+	},
+	"dependencies": {}
 }

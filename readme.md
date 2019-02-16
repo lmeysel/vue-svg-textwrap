@@ -117,12 +117,13 @@ Since 0.0.12 you are able to override the settings with dynamic property values 
 	* `tspan.style.display` (will be set to 'none' temporarily to ignore too long lines in further measurements)
 
 ## Be careful with `text`'s `transform`-property.
-... because this will be overwritten, to fit the alignment. If want to set the translation by yourself, use `align = 'none'`. The transform property will not be touched then.
+... because this will be overwritten, to fit the alignment and (if given) the left padding. If want to set the translation by yourself, use `align = 'none'`. The transform property will not be touched then. The left padding then will be applied via the tspan's x-property.
 
 ## Polyfilling
 For IE there are two functions which are needed to be polyfilled:
 * `SVGElement.innerHTML` could be done with innersvg-polyfill (npm-package)
 * `Object.assign(...)` could be done with core-js/(library/)fn/object/assign
+
 You may want to control your polyfills yourself, therefore the default exported comes without polyfills, but there are also polyfilled versions available: `dist/index.pf.js` and `dist/index.pf.min.js`.
 
 ## Very long words
