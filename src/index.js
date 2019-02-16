@@ -32,7 +32,7 @@ function newLine(el, span, config) {
 	span.style.display = null;
 	tmp.removeAttribute('y');
 	tmp.setAttribute('dy', config.lineHeight);
-	if (!config.align) // do alignment in text's transform-property
+	if (!config.align) // set explicitly when not aligning (i.e. don't use text's transform)
 		tmp.setAttribute('x', config.paddingLeft);
 	else
 		tmp.setAttribute('x', 0);
