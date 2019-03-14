@@ -1,3 +1,4 @@
+const SVG_NS = 'http://www.w3.org/2000/svg';
 const alignments = { 'top': true, 'baseline': true, 'bottom': true, 'middle': true }
 function getConfig(mod, cfg) {
 	const ret = {
@@ -5,8 +6,8 @@ function getConfig(mod, cfg) {
 		'width': null || cfg.width,
 		'align': cfg.align === 'none' ? false : (alignments[cfg.align] ? cfg.align : 'baseline'),
 		'lineHeight': cfg.lineHeight || '1.125em',
-		'paddingLeft': cfg.paddingLeft === undefined ? (cfg.padding === undefined ? 0 : cfg.padding) : cfg.paddingLeft,
-		'paddingRight': cfg.paddingRight === undefined ? (cfg.padding === undefined ? 0 : cfg.padding) : cfg.paddingRight,
+		'paddingLeft': !cfg.paddingLeft ? (!cfg.padding ? 0 : cfg.padding) : cfg.paddingLeft,
+		'paddingRight': !cfg.paddingRight ? (!cfg.padding ? 0 : cfg.padding) : cfg.paddingRight,
 		'afterReflow': cfg.afterReflow instanceof Function ? cfg.afterReflow : false
 	};
 	ret.padding = ret.paddingLeft + ret.paddingRight;
@@ -45,14 +46,14 @@ function newLine(el, span, config) {
  */
 function set(el, text, config) {
 	el[config.plain ? 'textContent' : 'innerHTML'] = text || '';
+	const h0 = el.getBoundingClientRect().height;
 	if (!config.width) return;
 	const plain = [];
-	const physLn = el.getBBox().height; // physical line height
 	// convert text nodes to tspans, clear spans
 	for (let i = 0; i < el.childNodes.length; i++) {
 		let n = el.childNodes[i];
 		if (n instanceof Text) {
-			const tmp = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+			const tmp = document.createElementNS(SVG_NS, 'tspan');
 			tmp.textContent = n.textContent;
 			el.replaceChild(tmp, n);
 			n = tmp;
@@ -72,13 +73,13 @@ function set(el, text, config) {
 		let wc = words.length, span = el.childNodes[c + offset], txt = '', forceBreak = false;
 		for (let i = 0; i < wc; i++) {
 			span.textContent += i ? ' ' + words[i] : words[i];
-			forceBreak = el.getBBox().width > w;
+			forceBreak = el.getBoundingClientRect().width > w;
 			while (forceBreak) {
 				span.textContent = txt;
 				span = newLine(el, span, config);
 				txt = span.textContent = words[i];
 				offset++;
-				if (el.getBBox().width > w) {
+				if (el.getBoundingClientRect().width > w) {
 					span.style.display = 'none'; // too long word, hide for further correct measurements
 					txt = words[++i];
 					if (!txt) forceBreak = false;
@@ -88,17 +89,21 @@ function set(el, text, config) {
 		}
 	}
 
-	for (let i = 0; i < el.childNodes.length; i++)
-		el.childNodes[i].style.display = null;
+	if (!el.children.length)
+		return;
+
+	for (let i = 0; i < el.childNodes.length; i++) {
+		el.childNodes[i].style.display = '';
+	}
 
 	if (config.align === 'middle')
-		el.setAttribute('transform', `translate(${config.paddingLeft}, ${-(el.getBBox().height - physLn) / 2})`)
+		el.setAttribute('transform', `translate(${config.paddingLeft}, ${-(el.getBoundingClientRect().height - 1.5 * h0) / 2})`)
 	else if (config.align === 'baseline')
 		el.setAttribute('transform', `translate(${config.paddingLeft}, 0)`)
 	else if (config.align === 'bottom')
-		el.setAttribute('transform', `translate(${config.paddingLeft}, ${-(el.getBBox().height - physLn)})`)
+		el.setAttribute('transform', `translate(${config.paddingLeft}, ${-(el.getBoundingClientRect().height - h0)})`)
 	else if (config.align === 'top')
-		el.setAttribute('transform', `translate(${config.paddingLeft}, ${physLn})`)
+		el.setAttribute('transform', `translate(${config.paddingLeft}, ${h0})`)
 }
 
 /**

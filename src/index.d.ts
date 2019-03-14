@@ -1,6 +1,6 @@
 interface ITextWrapperConfiguration {
 	/**
-	 * True, to set text-attribute as text instead of HTML.
+	 * True, to set text-attribute as text instead of HTML, defaults to false.
 	 */
 	plain: boolean,
 	/**

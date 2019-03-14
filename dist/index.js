@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.ConfiguredWrapper = exports.default = void 0;
+var SVG_NS = 'http://www.w3.org/2000/svg';
 var alignments = {
   'top': true,
   'baseline': true,
@@ -17,8 +18,8 @@ function getConfig(mod, cfg) {
     'width': null || cfg.width,
     'align': cfg.align === 'none' ? false : alignments[cfg.align] ? cfg.align : 'baseline',
     'lineHeight': cfg.lineHeight || '1.125em',
-    'paddingLeft': cfg.paddingLeft === undefined ? cfg.padding === undefined ? 0 : cfg.padding : cfg.paddingLeft,
-    'paddingRight': cfg.paddingRight === undefined ? cfg.padding === undefined ? 0 : cfg.padding : cfg.paddingRight,
+    'paddingLeft': !cfg.paddingLeft ? !cfg.padding ? 0 : cfg.padding : cfg.paddingLeft,
+    'paddingRight': !cfg.paddingRight ? !cfg.padding ? 0 : cfg.padding : cfg.paddingRight,
     'afterReflow': cfg.afterReflow instanceof Function ? cfg.afterReflow : false
   };
   ret.padding = ret.paddingLeft + ret.paddingRight;
@@ -46,15 +47,15 @@ function newLine(el, span, config) {
 
 function set(el, text, config) {
   el[config.plain ? 'textContent' : 'innerHTML'] = text || '';
+  var h0 = el.getBoundingClientRect().height;
   if (!config.width) return;
   var plain = [];
-  var physLn = el.getBBox().height;
 
   for (var i = 0; i < el.childNodes.length; i++) {
     var n = el.childNodes[i];
 
     if (n instanceof Text) {
-      var tmp = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+      var tmp = document.createElementNS(SVG_NS, 'tspan');
       tmp.textContent = n.textContent;
       el.replaceChild(tmp, n);
       n = tmp;
@@ -81,7 +82,7 @@ function set(el, text, config) {
 
     for (var _i = 0; _i < wc; _i++) {
       span.textContent += _i ? ' ' + words[_i] : words[_i];
-      forceBreak = el.getBBox().width > w;
+      forceBreak = el.getBoundingClientRect().width > w;
 
       while (forceBreak) {
         span.textContent = txt;
@@ -89,7 +90,7 @@ function set(el, text, config) {
         txt = span.textContent = words[_i];
         offset++;
 
-        if (el.getBBox().width > w) {
+        if (el.getBoundingClientRect().width > w) {
           span.style.display = 'none';
           txt = words[++_i];
           if (!txt) forceBreak = false;
@@ -100,11 +101,13 @@ function set(el, text, config) {
     }
   }
 
+  if (!el.children.length) return;
+
   for (var _i2 = 0; _i2 < el.childNodes.length; _i2++) {
-    el.childNodes[_i2].style.display = null;
+    el.childNodes[_i2].style.display = '';
   }
 
-  if (config.align === 'middle') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(-(el.getBBox().height - physLn) / 2, ")"));else if (config.align === 'baseline') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", 0)"));else if (config.align === 'bottom') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(-(el.getBBox().height - physLn), ")"));else if (config.align === 'top') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(physLn, ")"));
+  if (config.align === 'middle') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(-(el.getBoundingClientRect().height - 1.5 * h0) / 2, ")"));else if (config.align === 'baseline') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", 0)"));else if (config.align === 'bottom') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(-(el.getBoundingClientRect().height - h0), ")"));else if (config.align === 'top') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(h0, ")"));
 }
 
 function directive(config) {
