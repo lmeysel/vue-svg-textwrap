@@ -126,5 +126,11 @@ For IE there are two functions which are needed to be polyfilled:
 
 You may want to control your polyfills yourself, therefore the default exported comes without polyfills, but there are also polyfilled versions available: `dist/index.pf.js` and `dist/index.pf.min.js`.
 
+## One more word on IE
+There are cases where the measurement of the actual width of the text-elements does not work in IE11. I considered this (very very strange behavior) only using italic at the at least third `tspan` in a formatted text (i.e. `<tspan>foo</tspan><tspan>foo</tspan><tspan font-style="italic">foo</tspan>`). After spending a whole day trying to find the problem I give it up for now. So, the message is: ~~avoid Internet Explorer~~ avoid italic font (or at least test carefully when using italics.)
+
+## Different font sizes
+Be carful using formatted text with different font-sizes. Relative units refer to the elements font-size, which especially affects the line-height (if given in ems).
+
 ## Very long words
 Currently the wrapper has a problem with too long words, i.e words which are too long to wrap within the desired width (especially when formatting a text about a German *Donaudampfschifffahrtsgesellschaftskapitänskajüttenbodenreiniger*). Maybe I am just thinking too complicated for now or the problem is really difficult... Whatever, too long words cause unreliable behavior currently :(

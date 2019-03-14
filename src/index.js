@@ -30,7 +30,7 @@ function getConfig(mod, cfg) {
 function newLine(el, span, config) {
 	const tmp = span.cloneNode();
 	el.insertBefore(tmp, span.nextSibling);
-	span.style.display = null;
+	span.style.display = '';
 	tmp.removeAttribute('y');
 	tmp.setAttribute('dy', config.lineHeight);
 	if (!config.align) // set explicitly when not aligning (i.e. don't use text's transform)
@@ -58,7 +58,7 @@ function set(el, text, config) {
 			el.replaceChild(tmp, n);
 			n = tmp;
 		}
-		plain.push(n.textContent.split(' '));
+		plain.push(n.textContent.split(/\s/));
 		n.textContent = '';
 	}
 	if (!config.align) {
@@ -78,6 +78,9 @@ function set(el, text, config) {
 				span.textContent = txt;
 				span = newLine(el, span, config);
 				txt = span.textContent = words[i];
+				if(getComputedStyle(el).fontStyle == 'italic') {
+					console.log(el);
+				}
 				offset++;
 				if (el.getBoundingClientRect().width > w) {
 					span.style.display = 'none'; // too long word, hide for further correct measurements
@@ -89,7 +92,7 @@ function set(el, text, config) {
 		}
 	}
 
-	if (!el.children.length)
+	if (!el.childNodes.length)
 		return;
 
 	for (let i = 0; i < el.childNodes.length; i++) {

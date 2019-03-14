@@ -38,7 +38,7 @@ function getConfig(mod, cfg) {
 function newLine(el, span, config) {
   var tmp = span.cloneNode();
   el.insertBefore(tmp, span.nextSibling);
-  span.style.display = null;
+  span.style.display = '';
   tmp.removeAttribute('y');
   tmp.setAttribute('dy', config.lineHeight);
   if (!config.align) tmp.setAttribute('x', config.paddingLeft);else tmp.setAttribute('x', 0);
@@ -61,7 +61,7 @@ function set(el, text, config) {
       n = tmp;
     }
 
-    plain.push(n.textContent.split(' '));
+    plain.push(n.textContent.split(/\s/));
     n.textContent = '';
   }
 
@@ -88,6 +88,11 @@ function set(el, text, config) {
         span.textContent = txt;
         span = newLine(el, span, config);
         txt = span.textContent = words[_i];
+
+        if (getComputedStyle(el).fontStyle == 'italic') {
+          console.log(el);
+        }
+
         offset++;
 
         if (el.getBoundingClientRect().width > w) {
@@ -101,7 +106,7 @@ function set(el, text, config) {
     }
   }
 
-  if (!el.children.length) return;
+  if (!el.childNodes.length) return;
 
   for (var _i2 = 0; _i2 < el.childNodes.length; _i2++) {
     el.childNodes[_i2].style.display = '';
