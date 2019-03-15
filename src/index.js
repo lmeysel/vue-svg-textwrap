@@ -10,7 +10,7 @@ function getConfig(mod, cfg) {
 		'paddingRight': !cfg.paddingRight ? (!cfg.padding ? 0 : cfg.padding) : cfg.paddingRight,
 		'afterReflow': cfg.afterReflow instanceof Function ? cfg.afterReflow : false
 	};
-	ret.padding = ret.paddingLeft + ret.paddingRight;
+	ret._padding = ret.paddingLeft + ret.paddingRight;
 	for (let k in mod) {
 		if (k === 'plain') ret.plain = true;
 		else if (alignments[k]) {
@@ -47,7 +47,6 @@ function newLine(el, span, config) {
 function set(el, text, config) {
 	el[config.plain ? 'textContent' : 'innerHTML'] = text || '';
 	const h0 = el.getBoundingClientRect().height;
-	if (!config.width) return;
 	const plain = [];
 	// convert text nodes to tspans, clear spans
 	for (let i = 0; i < el.childNodes.length; i++) {
@@ -65,30 +64,39 @@ function set(el, text, config) {
 		// set explicitly when not aligning (i.e. don't use text's transform)
 		el.childNodes[0].setAttribute('x', config.paddingLeft);
 	}
-
-	// float texts
-	let offset = 0, w = config.width - config.padding, childCnt = el.childElementCount;
-	for (let c = 0; c < childCnt; c++) {
-		const words = plain[c];
-		let wc = words.length, span = el.childNodes[c + offset], txt = '', forceBreak = false;
-		for (let i = 0; i < wc; i++) {
-			span.textContent += i ? ' ' + words[i] : words[i];
-			forceBreak = el.getBoundingClientRect().width > w;
-			while (forceBreak) {
-				span.textContent = txt;
-				span = newLine(el, span, config);
-				txt = span.textContent = words[i];
-				if(getComputedStyle(el).fontStyle == 'italic') {
-					console.log(el);
-				}
-				offset++;
-				if (el.getBoundingClientRect().width > w) {
-					span.style.display = 'none'; // too long word, hide for further correct measurements
-					txt = words[++i];
-					if (!txt) forceBreak = false;
-				} else forceBreak = false;
+	if (config.width) {
+		for (let i = 0; i < el.childNodes.length; i++) {
+			let n = el.childNodes[i];
+			if (n instanceof Text) {
+				const tmp = document.createElementNS(SVG_NS, 'tspan');
+				tmp.textContent = n.textContent;
+				el.replaceChild(tmp, n);
+				n = tmp;
 			}
-			txt = span.textContent;
+			plain.push(n.textContent.split(/\s/));
+		}
+
+		// float texts
+		let offset = 0, w = config.width - config._padding, childCnt = el.childElementCount;
+		for (let c = 0; c < childCnt; c++) {
+			const words = plain[c];
+			let wc = words.length, span = el.childNodes[c + offset], txt = '', forceBreak = false;
+			for (let i = 0; i < wc; i++) {
+				span.textContent += i ? ' ' + words[i] : words[i];
+				forceBreak = el.getBoundingClientRect().width > w;
+				while (forceBreak) {
+					span.textContent = txt;
+					span = newLine(el, span, config);
+					txt = span.textContent = words[i];
+					offset++;
+					if (el.getBoundingClientRect().width > w) {
+						span.style.display = 'none'; // too long word, hide for further correct measurements
+						txt = words[++i];
+						if (!txt) forceBreak = false;
+					} else forceBreak = false;
+				}
+				txt = span.textContent;
+			}
 		}
 	}
 

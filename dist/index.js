@@ -22,7 +22,7 @@ function getConfig(mod, cfg) {
     'paddingRight': !cfg.paddingRight ? !cfg.padding ? 0 : cfg.padding : cfg.paddingRight,
     'afterReflow': cfg.afterReflow instanceof Function ? cfg.afterReflow : false
   };
-  ret.padding = ret.paddingLeft + ret.paddingRight;
+  ret._padding = ret.paddingLeft + ret.paddingRight;
 
   for (var k in mod) {
     if (k === 'plain') ret.plain = true;else if (alignments[k]) {
@@ -48,7 +48,6 @@ function newLine(el, span, config) {
 function set(el, text, config) {
   el[config.plain ? 'textContent' : 'innerHTML'] = text || '';
   var h0 = el.getBoundingClientRect().height;
-  if (!config.width) return;
   var plain = [];
 
   for (var i = 0; i < el.childNodes.length; i++) {
@@ -69,47 +68,58 @@ function set(el, text, config) {
     el.childNodes[0].setAttribute('x', config.paddingLeft);
   }
 
-  var offset = 0,
-      w = config.width - config.padding,
-      childCnt = el.childElementCount;
+  if (config.width) {
+    for (var _i = 0; _i < el.childNodes.length; _i++) {
+      var _n = el.childNodes[_i];
 
-  for (var c = 0; c < childCnt; c++) {
-    var words = plain[c];
-    var wc = words.length,
-        span = el.childNodes[c + offset],
-        txt = '',
-        forceBreak = false;
+      if (_n instanceof Text) {
+        var _tmp = document.createElementNS(SVG_NS, 'tspan');
 
-    for (var _i = 0; _i < wc; _i++) {
-      span.textContent += _i ? ' ' + words[_i] : words[_i];
-      forceBreak = el.getBoundingClientRect().width > w;
-
-      while (forceBreak) {
-        span.textContent = txt;
-        span = newLine(el, span, config);
-        txt = span.textContent = words[_i];
-
-        if (getComputedStyle(el).fontStyle == 'italic') {
-          console.log(el);
-        }
-
-        offset++;
-
-        if (el.getBoundingClientRect().width > w) {
-          span.style.display = 'none';
-          txt = words[++_i];
-          if (!txt) forceBreak = false;
-        } else forceBreak = false;
+        _tmp.textContent = _n.textContent;
+        el.replaceChild(_tmp, _n);
+        _n = _tmp;
       }
 
-      txt = span.textContent;
+      plain.push(_n.textContent.split(/\s/));
+    }
+
+    var offset = 0,
+        w = config.width - config._padding,
+        childCnt = el.childElementCount;
+
+    for (var c = 0; c < childCnt; c++) {
+      var words = plain[c];
+      var wc = words.length,
+          span = el.childNodes[c + offset],
+          txt = '',
+          forceBreak = false;
+
+      for (var _i2 = 0; _i2 < wc; _i2++) {
+        span.textContent += _i2 ? ' ' + words[_i2] : words[_i2];
+        forceBreak = el.getBoundingClientRect().width > w;
+
+        while (forceBreak) {
+          span.textContent = txt;
+          span = newLine(el, span, config);
+          txt = span.textContent = words[_i2];
+          offset++;
+
+          if (el.getBoundingClientRect().width > w) {
+            span.style.display = 'none';
+            txt = words[++_i2];
+            if (!txt) forceBreak = false;
+          } else forceBreak = false;
+        }
+
+        txt = span.textContent;
+      }
     }
   }
 
   if (!el.childNodes.length) return;
 
-  for (var _i2 = 0; _i2 < el.childNodes.length; _i2++) {
-    el.childNodes[_i2].style.display = '';
+  for (var _i3 = 0; _i3 < el.childNodes.length; _i3++) {
+    el.childNodes[_i3].style.display = '';
   }
 
   if (config.align === 'middle') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(-(el.getBoundingClientRect().height - 1.5 * h0) / 2, ")"));else if (config.align === 'baseline') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", 0)"));else if (config.align === 'bottom') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(-(el.getBoundingClientRect().height - h0), ")"));else if (config.align === 'top') el.setAttribute('transform', "translate(".concat(config.paddingLeft, ", ").concat(h0, ")"));

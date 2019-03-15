@@ -31,6 +31,7 @@ For now, there is no text wrapping - how should the directive know the desired m
 You can tell it via a numeric modifier (i.e. `v-wrapper.250="myTextProperty"`) which will be interpreted as the maximum width in pixels, `250` here.
 
 The same way you can tell the wrapper about the vertical alignment, which accepts `'top'`, `'middle'`, `'bottom'`, `'baseline'` and `'none'`, defaults to `'baseline'`.
+**Caution**: As of 0.0.16 the vertical transform for `'middle'` is caluclated more precise, keep that in mind when updating. When wrapping only few lines, the more the vertical difference (between this and older versions) becomes.
 
 By default the given value will be interpreted as HTML/SVG, i.e. it will be applied via the innerHTML property of the node. Why that? Uhm... you may set formatted text? Some words bold, some others highlighted? Yes, the wrapper respects your formatting. But if you prefer to set the textContent you can do with the `plain`-modifier.
 
