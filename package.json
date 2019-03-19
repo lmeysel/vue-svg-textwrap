@@ -46,7 +46,7 @@
 		"browser-sync-webpack-plugin": "^2.2.2",
 		"core-js": "^2.6.5",
 		"innersvg-polyfill": "0.0.2",
-		"laravel-mix": "^4.0.14",
+		"laravel-mix": "^4.0.15",
 		"vue": "^2.6.6",
 		"vue-template-compiler": "^2.6.6"
 	},
