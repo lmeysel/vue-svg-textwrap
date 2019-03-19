@@ -16,7 +16,7 @@ function getConfig(mod, cfg) {
   var ret = {
     'plain': !cfg.plain ? false : true,
     'width': null || cfg.width,
-    'align': cfg.align === 'none' ? false : alignments[cfg.align] ? cfg.align : 'baseline',
+    'align': cfg.align === 'none' || cfg.align === false ? false : alignments[cfg.align] ? cfg.align : 'baseline',
     'lineHeight': cfg.lineHeight || '1.125em',
     'paddingLeft': !cfg.paddingLeft ? !cfg.padding ? 0 : cfg.padding : cfg.paddingLeft,
     'paddingRight': !cfg.paddingRight ? !cfg.padding ? 0 : cfg.padding : cfg.paddingRight,
@@ -60,8 +60,10 @@ function set(el, text, config) {
       n = tmp;
     }
 
-    plain.push(n.textContent.split(/\s/));
-    n.textContent = '';
+    if (config.width) {
+      plain.push(n.textContent.split(/\s/));
+      n.textContent = '';
+    }
   }
 
   if (!config.align) {
@@ -136,7 +138,7 @@ function directive(config) {
     update: function update(el, binding, _ref) {
       var context = _ref.context;
 
-      if (binding.value !== binding.oldValue) {
+      if (binding.value != binding.oldValue) {
         var cfg = el.__WRAP_CONFIG;
 
         if (binding.value && typeof binding.value !== 'string') {

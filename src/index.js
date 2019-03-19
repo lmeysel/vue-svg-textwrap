@@ -4,7 +4,7 @@ function getConfig(mod, cfg) {
 	const ret = {
 		'plain': !cfg.plain ? false : true,
 		'width': null || cfg.width,
-		'align': cfg.align === 'none' ? false : (alignments[cfg.align] ? cfg.align : 'baseline'),
+		'align': cfg.align === 'none' || cfg.align === false ? false : (alignments[cfg.align] ? cfg.align : 'baseline'),
 		'lineHeight': cfg.lineHeight || '1.125em',
 		'paddingLeft': !cfg.paddingLeft ? (!cfg.padding ? 0 : cfg.padding) : cfg.paddingLeft,
 		'paddingRight': !cfg.paddingRight ? (!cfg.padding ? 0 : cfg.padding) : cfg.paddingRight,
@@ -57,8 +57,10 @@ function set(el, text, config) {
 			el.replaceChild(tmp, n);
 			n = tmp;
 		}
-		plain.push(n.textContent.split(/\s/));
-		n.textContent = '';
+		if (config.width) {
+			plain.push(n.textContent.split(/\s/));
+			n.textContent = '';
+		}
 	}
 	if (!config.align) {
 		// set explicitly when not aligning (i.e. don't use text's transform)
@@ -131,7 +133,7 @@ function directive(config) {
 			r.update.apply(this, arguments);
 		},
 		update(el, binding, { context }) {
-			if (binding.value !== binding.oldValue) {
+			if (binding.value != binding.oldValue) {
 				let cfg = el.__WRAP_CONFIG
 				if (binding.value && (typeof binding.value) !== 'string') {
 					const text = binding.value.text;

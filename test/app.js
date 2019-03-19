@@ -4,7 +4,10 @@ const appTemplate = require('./app.vue').default;
 new Vue(Object.assign(appTemplate, {
 	directives: {
 		wrap: ConfiguredWrapper({
-			lineHeight: '1.5em'
+			lineHeight: '1.5em',
+		}),
+		noalign: ConfiguredWrapper({
+			align: 'none'
 		}),
 		wrapPad: ConfiguredWrapper({
 			width: 200,
