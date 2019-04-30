@@ -20,7 +20,8 @@ function getConfig(mod, cfg) {
     'lineHeight': cfg.lineHeight || '1.125em',
     'paddingLeft': !cfg.paddingLeft ? !cfg.padding ? 0 : cfg.padding : cfg.paddingLeft,
     'paddingRight': !cfg.paddingRight ? !cfg.padding ? 0 : cfg.padding : cfg.paddingRight,
-    'afterReflow': cfg.afterReflow instanceof Function ? cfg.afterReflow : false
+    'afterReflow': cfg.afterReflow instanceof Function ? cfg.afterReflow : false,
+    'physicalMeasurement': cfg.physicalMeasurement ? true : false
   };
   ret._padding = ret.paddingLeft + ret.paddingRight;
 
@@ -47,6 +48,8 @@ function newLine(el, span, config) {
 
 function set(el, text, config) {
   el[config.plain ? 'textContent' : 'innerHTML'] = text || '';
+  var pscale = config.physicalMeasurement ? 1 : el.__OWNING_SVG.viewBox.animVal.width / el.__OWNING_SVG.getBoundingClientRect().width;
+  console.log(pscale);
   var h0 = el.getBoundingClientRect().height;
   var plain = [];
 
@@ -98,7 +101,7 @@ function set(el, text, config) {
 
       for (var _i2 = 0; _i2 < wc; _i2++) {
         span.textContent += _i2 ? ' ' + words[_i2] : words[_i2];
-        forceBreak = el.getBoundingClientRect().width > w;
+        forceBreak = el.getBoundingClientRect().width * pscale > w;
 
         while (forceBreak) {
           span.textContent = txt;
@@ -106,7 +109,7 @@ function set(el, text, config) {
           txt = span.textContent = words[_i2];
           offset++;
 
-          if (el.getBoundingClientRect().width > w) {
+          if (el.getBoundingClientRect().width * pscale > w) {
             span.style.display = 'none';
             txt = words[++_i2];
             if (!txt) forceBreak = false;
@@ -133,6 +136,12 @@ function directive(config) {
     inserted: function inserted(el, binding) {
       if (!(el instanceof SVGTextElement)) throw new Error('Text-wrap directive must be bound to an SVG text element.');
       el.__WRAP_CONFIG = getConfig(binding.modifiers, config);
+      el.__OWNING_SVG = el.parentNode;
+
+      while (!(el.__OWNING_SVG instanceof SVGSVGElement)) {
+        el.__OWNING_SVG = el.__OWNING_SVG.parentNode;
+      }
+
       r.update.apply(this, arguments);
     },
     update: function update(el, binding, _ref) {

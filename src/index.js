@@ -8,7 +8,8 @@ function getConfig(mod, cfg) {
 		'lineHeight': cfg.lineHeight || '1.125em',
 		'paddingLeft': !cfg.paddingLeft ? (!cfg.padding ? 0 : cfg.padding) : cfg.paddingLeft,
 		'paddingRight': !cfg.paddingRight ? (!cfg.padding ? 0 : cfg.padding) : cfg.paddingRight,
-		'afterReflow': cfg.afterReflow instanceof Function ? cfg.afterReflow : false
+		'afterReflow': cfg.afterReflow instanceof Function ? cfg.afterReflow : false,
+		'physicalMeasurement': cfg.physicalMeasurement ? true : false
 	};
 	ret._padding = ret.paddingLeft + ret.paddingRight;
 	for (let k in mod) {
@@ -39,6 +40,7 @@ function newLine(el, span, config) {
 		tmp.setAttribute('x', 0);
 	return tmp;
 }
+
 /**
  * @param {SVGTextElement} el 
  * @param {String} text 
@@ -46,6 +48,8 @@ function newLine(el, span, config) {
  */
 function set(el, text, config) {
 	el[config.plain ? 'textContent' : 'innerHTML'] = text || '';
+	const pscale = config.physicalMeasurement ? 1 : el.__OWNING_SVG.viewBox.animVal.width / el.__OWNING_SVG.getBoundingClientRect().width;
+	console.log(pscale);
 	const h0 = el.getBoundingClientRect().height;
 	const plain = [];
 	// convert text nodes to tspans, clear spans
@@ -85,13 +89,13 @@ function set(el, text, config) {
 			let wc = words.length, span = el.childNodes[c + offset], txt = '', forceBreak = false;
 			for (let i = 0; i < wc; i++) {
 				span.textContent += i ? ' ' + words[i] : words[i];
-				forceBreak = el.getBoundingClientRect().width > w;
+				forceBreak = el.getBoundingClientRect().width * pscale > w;
 				while (forceBreak) {
 					span.textContent = txt;
 					span = newLine(el, span, config);
 					txt = span.textContent = words[i];
 					offset++;
-					if (el.getBoundingClientRect().width > w) {
+					if (el.getBoundingClientRect().width * pscale > w) {
 						span.style.display = 'none'; // too long word, hide for further correct measurements
 						txt = words[++i];
 						if (!txt) forceBreak = false;
@@ -130,6 +134,9 @@ function directive(config) {
 			if (!(el instanceof SVGTextElement))
 				throw new Error('Text-wrap directive must be bound to an SVG text element.');
 			el.__WRAP_CONFIG = getConfig(binding.modifiers, config);
+			el.__OWNING_SVG = el.parentNode;
+			while (!(el.__OWNING_SVG instanceof SVGSVGElement))
+				el.__OWNING_SVG = el.__OWNING_SVG.parentNode;
 			r.update.apply(this, arguments);
 		},
 		update(el, binding, { context }) {

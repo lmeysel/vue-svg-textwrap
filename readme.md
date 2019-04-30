@@ -100,6 +100,12 @@ This is how you may override the default line-height, but you can also do so wit
 			<td></td>
 			<td>Callback routine to call after text is updated and wrapping calculation is done. `this` is the owning Vue component within the callback. <i>(Since 0.14)</i></td>
 		</tr>
+		<tr>
+			<td>physicalMeasurement</td>
+			<td>boolean</td>
+			<td>false</td>
+			<td>Indicates whether to measure in phyiscal width or in viewBox-units. <i>(Since 0.20)</i></td>
+		</tr>
 	</tbody>
 </table>
 
@@ -108,6 +114,9 @@ Since 0.0.12 you are able to override the settings with dynamic property values 
 ```html
 <text v-wrapper="{ text: myTextProperty, width: myWidthProperty }" />
 ```
+
+## Physical measurement
+As of 0.20 you may control how measuring is done. Assume your SVG is having viewBox="0 0 100 100" but with the actual size of 200&times;200 pixels. The text will now be rendered twice as large, but still wrapped at a given width. When placing elements within the SVG it will be done on viewBox units and then scaled. Measuring the text, however, will be done after it is scaled. This might be wanted, but in most cases, i think, it is not. You may control this using the physicalMeasurement-setting, which defaults to false.
 
 ## About the wrapper
 * When saying "line-height", I am just talking about the value applied on `tspan`-elements for the `dy`-attribute.
