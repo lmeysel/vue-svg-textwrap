@@ -34,4 +34,9 @@ interface ITextWrapperConfiguration {
 	 * A callback, called after the text has been updated and reflow is done.
 	 */
 	afterReflow: (sender: SVGTextElement, binding: ITextWrapperConfiguration) => any,
+
+	/**
+	 * True to measure on physical units (i.e. without resect to potential scaling)
+	 */
+	physicalMeasurement: Boolean
 }

@@ -49,7 +49,6 @@ function newLine(el, span, config) {
 function set(el, text, config) {
 	el[config.plain ? 'textContent' : 'innerHTML'] = text || '';
 	const pscale = config.physicalMeasurement ? 1 : el.__OWNING_SVG.viewBox.animVal.width / el.__OWNING_SVG.getBoundingClientRect().width;
-	console.log(pscale);
 	const h0 = el.getBoundingClientRect().height;
 	const plain = [];
 	// convert text nodes to tspans, clear spans
